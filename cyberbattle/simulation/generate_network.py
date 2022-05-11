@@ -186,7 +186,7 @@ def cyberbattle_model_from_traffic_graph(
                 reward_string="Discovered new entity - Human",
                 cost=5.0
             )
-        #######
+        #
 
         return library
 
@@ -269,7 +269,6 @@ def new_environment(n_servers_per_protocol: int):
     here for the statistical generative model
     were arbirarily picked. We recommend exploring different values for those parameters.
     """
-
 
 
 # DRL - Nothing should break here, follows format {Create graph, add vuln edges to DefaultDict, (repeat for vuln), create nx model}
