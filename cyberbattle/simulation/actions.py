@@ -262,11 +262,10 @@ class AgentActions:
         elif isinstance(outcome, model.LeakedGuyId):
             for node_id in outcome.nodes:
                 self.__mark_node_as_owned(node_id)
-                
+
                 if self.__mark_node_as_owned(node_id):
                     newly_discovered_nodes += 1
                     newly_discovered_nodes_value += self._environment.get_node(node_id).value
-                    
 
                 self.__annotate_edge(reference_node, node_id, EdgeAnnotation.KNOWS)
 

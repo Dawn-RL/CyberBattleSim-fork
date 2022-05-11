@@ -180,10 +180,10 @@ class EnvironmentDebugging:
         pos = nx.shell_layout(subgraph, [[known_nodes[0]], known_nodes[1:]])
 
         def edge_text(source: model.NodeID, target: model.NodeID) -> str:
-            
+
             data = self.__environment.network.get_edge_data(source, target)
 
-# DRL Added - Fixes bug Kind Error shown in bug 1, probably not an ideal solution            
+# DRL Added - Fixes bug Kind Error shown in bug 1, probably not an ideal solution
             if 'kind' in data:
                 name: str = data['kind'].name
             else:

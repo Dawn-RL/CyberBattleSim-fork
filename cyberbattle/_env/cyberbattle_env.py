@@ -813,7 +813,6 @@ class CyberBattleEnv(gym.Env):
 
             obs['newly_discovered_nodes_count'] = numpy.int32(newly_discovered_nodes_count)
 
-        
             # Encode the returned credentials in the format expected by the gym agent
             obs['leaked_credentials'] = tuple(
                 [numpy.array([USED_SLOT,
@@ -821,7 +820,7 @@ class CyberBattleEnv(gym.Env):
                               self.__find_external_index(cached_credential.node),
                               self.__portname_to_index(cached_credential.port)], numpy.int32)
                  for cache_index, cached_credential in newly_discovered_creds])
-        
+
 
 # DRL Added
 
@@ -835,7 +834,6 @@ class CyberBattleEnv(gym.Env):
 
             obs['newly_discovered_nodes_count'] = numpy.int32(newly_discovered_nodes_count)
 ##########
-
 
         elif isinstance(outcome, model.LateralMove):
             obs['lateral_move'] = numpy.int32(1)

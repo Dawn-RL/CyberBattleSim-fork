@@ -15,22 +15,23 @@ ENV_IDENTIFIERS = Identifiers(
     properties=[
         'breach_node'
     ],
-  
+
     ports=['SMB', 'RDP', 'HTTP'],
-    
+
     local_vulnerabilities=[
         'ScanWindowsCredentialManagerForRDP',
         'ScanWindowsExplorerRecentFiles',
         'ScanWindowsCredentialManagerForSMB',
-        'Knows_on_capture' # DRL Added
-        
+        'Knows_on_capture'  # DRL Added
+
     ],
-    
+
     remote_vulnerabilities=[
         'Traceroute',
     ],
 
 )
+
 
 def cyberbattle_model_from_traffic_graph(
     traffic_graph: nx.DiGraph,
@@ -172,9 +173,6 @@ def cyberbattle_model_from_traffic_graph(
                 reward_string="Discovered new network nodes via traceroute",
                 cost=5.0
             )
-      
-
- 
 
         # DRL Added
         knows_neighbors = traffic_targets(node_id, 'Knows_on_capture')
@@ -183,13 +181,12 @@ def cyberbattle_model_from_traffic_graph(
             library['Knows_on_capture'] = m.VulnerabilityInfo(
                 description="Attempt to discover human employee associated with node",
                 type=m.VulnerabilityType.LOCAL,
-                outcome=m.LeakedGuyId([target_node for target_node in knows_neighbors])
-                ,
-                
+                outcome=m.LeakedGuyId([target_node for target_node in knows_neighbors]),
+
                 reward_string="Discovered new entity - Human",
                 cost=5.0
             )
-        #######    
+        #######
 
         return library
 
@@ -232,6 +229,7 @@ def cyberbattle_model_from_traffic_graph(
             firewall=firewall_conf
         )
 # DRL Added - Ugly, but adds Data without firewall to custom nodes
+
     def create_node_data_two(node_id: m.NodeID):
         return m.NodeInfo(
             services=[m.ListeningService(name=port, allowedCredentials=assigned_passwords[(target_node, port)])
@@ -243,25 +241,24 @@ def cyberbattle_model_from_traffic_graph(
             agent_installed=False,
             firewall=firewall_conf_deny
         )
-    
+
     j: int = 0
 
     for node in list(graph.nodes):
-        
+
         if j < 15:
             if node != entry_node_id:
- 
-                
+
                 graph.nodes[node].clear()
                 graph.nodes[node].update({'data': create_node_data(node)})
         # DRL Added - Ugly coding continues here, adding data to new nodes
         else:
             if node != entry_node_id:
-                 graph.nodes[node].clear()
-                 graph.nodes[node].update({'data': create_node_data_two(node)}) 
-        
+                graph.nodes[node].clear()
+                graph.nodes[node].update({'data': create_node_data_two(node)})
+
         j += 1
-       
+
     return graph
 
 
@@ -290,57 +287,56 @@ def new_environment(n_servers_per_protocol: int):
     edges_labels = defaultdict(set)
 
     for protocol in protocols:
-    
-        h = nx.fast_gnp_random_graph(15, 
-                                     0.5, 
-                                     seed     = None, 
-                                     directed = True
+
+        h = nx.fast_gnp_random_graph(15,
+                                     0.5,
+                                     seed=None,
+                                     directed=True
                                      )
         for edge in h.edges:
-        
+
             edges_labels[edge].add(protocol)
 
 # Create graph with no connections except new nodes
-    h1 = nx.fast_gnp_random_graph(15, 
-                                   0, 
-                                   seed     = 1, 
-                                   directed = True 
-                                   )
-    i          : int = 0
+    h1 = nx.fast_gnp_random_graph(15,
+                                  0,
+                                  seed=1,
+                                  directed=True
+                                  )
+    i: int = 0
     num_players: int = 3
-    
+
     node_list = random.sample(h1.nodes, num_players)
-    
+
     for comp_Nodes in node_list:
-        
+
         next_node: int = 15 + i
         last_node: int = 15 + len(node_list) + i
-            
-        h1.add_node( next_node )
-        h1.add_node( last_node )
-        
+
+        h1.add_node(next_node)
+        h1.add_node(last_node)
+
         # Add pivot
         h1.add_edge(comp_Nodes, next_node)
         edges_labels[(comp_Nodes, next_node)].add('Knows_on_capture')
-   
+
         h1.add_edge(next_node, last_node)
         edges_labels[(next_node, last_node)].add('Test')
 
-        
-        i += 1 
+        i += 1
 
     print("[!] Printing Edges Labels: {}".format(edges_labels))
     traffic = nx.DiGraph()
 
     for (u, v), port in list(edges_labels.items()):
-    
-        traffic.add_edge(u, 
-                         v, 
-                         protocol = port)  
- 
+
+        traffic.add_edge(u,
+                         v,
+                         protocol=port)
+
     colour_map = []
 
-    for (u,v), proto in list(edges_labels.items()):
+    for (u, v), proto in list(edges_labels.items()):
 
         if len(proto) == 1 and 'HTTP' in proto:
             col = 'blue'
@@ -356,19 +352,17 @@ def new_environment(n_servers_per_protocol: int):
             col = 'purple'
         else:
             col = 'black'
-    
+
         colour_map.append(col)
 
-    nx.draw_networkx(traffic, 
-                 edge_color = colour_map,
-                 node_size   = 15200,
-                 arrowstyle  = '->',
-                 arrowsize   = 80,
-                 font_size   = 40,
-                 font_weight = "bold",
-                 )
-
-    
+    nx.draw_networkx(traffic,
+                     edge_color=colour_map,
+                     node_size=15200,
+                     arrowstyle='->',
+                     arrowsize=80,
+                     font_size=40,
+                     font_weight="bold",
+                     )
 
     network = cyberbattle_model_from_traffic_graph(
         traffic,
