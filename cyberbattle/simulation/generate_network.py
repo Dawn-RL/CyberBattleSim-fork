@@ -111,9 +111,7 @@ def cyberbattle_model_from_traffic_graph(
         that reveals immediate traffic neighbors from a given node"""
 
         # DRL Added - Thanks to Git: SherdenCooper for raising the issue (*Blumu - just double checking this is correct?)
-        library = None
-        if library is None:
-            library = {}
+        library = {}
 
         rdp_neighbors = traffic_targets(node_id, 'RDP')
 
