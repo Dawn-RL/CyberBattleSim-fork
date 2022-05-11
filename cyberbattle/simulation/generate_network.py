@@ -269,16 +269,7 @@ def new_environment(n_servers_per_protocol: int):
     here for the statistical generative model
     were arbirarily picked. We recommend exploring different values for those parameters.
     """
-#    traffic = generate_random_traffic_network(seed=None,
-#                                              n_clients=50,
-#                                              n_servers={
-#                                                  "SMB": n_servers_per_protocol,
-#                                                  "HTTP": n_servers_per_protocol,
-#                                                  "RDP": n_servers_per_protocol,
-#                                              },
-#                                              alpha=[(1, 1), (0.2, 0.5)],
-#                                              beta=[(1000, 10), (10, 100)])
-#
+
 
 
 # DRL - Nothing should break here, follows format {Create graph, add vuln edges to DefaultDict, (repeat for vuln), create nx model}
@@ -308,7 +299,7 @@ def new_environment(n_servers_per_protocol: int):
 
     node_list = random.sample(h1.nodes, num_players)
 
-    for comp_Nodes in node_list:
+    for comp_nodes in node_list:
 
         next_node: int = 15 + i
         last_node: int = 15 + len(node_list) + i
@@ -317,8 +308,8 @@ def new_environment(n_servers_per_protocol: int):
         h1.add_node(last_node)
 
         # Add pivot
-        h1.add_edge(comp_Nodes, next_node)
-        edges_labels[(comp_Nodes, next_node)].add('Knows_on_capture')
+        h1.add_edge(comp_nodes, next_node)
+        edges_labels[(comp_nodes, next_node)].add('Knows_on_capture')
 
         h1.add_edge(next_node, last_node)
         edges_labels[(next_node, last_node)].add('Test')
