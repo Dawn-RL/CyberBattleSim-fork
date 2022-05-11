@@ -3,7 +3,7 @@
 
 """ Generating random graphs"""
 from cyberbattle.simulation.model import Identifiers, NodeID, CredentialID, PortName, FirewallConfiguration, FirewallRule, RulePermission
-import numpy as np
+#import numpy as np
 import networkx as nx
 from cyberbattle.simulation import model as m
 import random
