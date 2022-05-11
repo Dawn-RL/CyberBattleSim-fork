@@ -184,10 +184,20 @@ class LeakedNodesId(VulnerabilityOutcome):
     def __init__(self, nodes: List[NodeID]):
         self.nodes = nodes
 
+### DRL ADDED ### 
+""" Added Physcial Vuln Targets, as required when  """
+class LeakedGuyId(VulnerabilityOutcome):
+    
+    def __init__(self, nodes: List[NodeID]):
+        self.nodes = nodes
+        
+
+####### Also added LeakedGuyID below
+
 
 VulnerabilityOutcomes = Union[
     LeakedCredentials, LeakedNodesId, PrivilegeEscalation, AdminEscalation,
-    SystemEscalation, CustomerData, LateralMove, ExploitFailed]
+    SystemEscalation, CustomerData, LateralMove, ExploitFailed, LeakedGuyId]
 
 
 class AttackResult():
