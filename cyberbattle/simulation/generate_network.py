@@ -110,7 +110,9 @@ def cyberbattle_model_from_traffic_graph(
         """Create random vulnerabilities
         that reveals immediate traffic neighbors from a given node"""
 
-        # DRL Added - Thanks to Git: SherdenCooper for raising the issue (*Blumu - just double checking this is correct?)
+        # DRL Added - Thanks to Git: SherdenCooper for raising the issue 
+        #(*Blumu - just double checking this is correct because library = None fails git with error: Expression of type "None" cannot be assigned to declared type "VulnerabilityLibrary"?)
+
         library = {}
 
         rdp_neighbors = traffic_targets(node_id, 'RDP')
